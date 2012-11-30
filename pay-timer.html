@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>Pay Timer</title>
+	<style type="text/css" media="screen">
+		h1 {font-family:'Georgia';margin-top:4px;}
+		p {font-family:helvetica;font-size:20px;font-weight:lighter;margin:0 0 12px 0;}
+	</style>
+</head>
+<body>
+	<h1>Watch that money roll in</h1>
+	<table border="0" cellspacing="5" cellpadding="0">
+		<tr>
+			<td>
+				<p>Current Time:</p>
+			</td>
+			<td align="right">
+				<p><span id="time"></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>Time Passed:</p>
+			</td>
+			<td align="right">
+				<p><span id="timer"></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>Money Earned:</p>
+			</td>
+			<td align="right">
+				<p><span id="pay"></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					<label for="wage">Wage</label>
+				</p>
+			</td>
+			<td align="right">
+				<p>
+					<input type="number" name="wage" value="0" id="wage" />
+				</p>
+			</td>
+		</tr>
+	</table>
+	<p>
+		<button id="start_timer" onclick="start_timer();">Reset Timer</button>
+	</p>
+	<script type="text/javascript" charset="utf-8">
+		var start, timer_id;
+		
+		// Start it up
+		start_timer();
+			
+		function start_timer() {
+			start = new Date();
+			timer();	
+			if (timer_id) {
+				clearInterval(timer_id);
+			}
+			timer_id = setInterval(function(){timer()},500);
+		}
+		
+		function leadingZero(num) {
+			(String(num).length < 2) ? num = String("0" + num) :  num = String(num);
+			return num;
+		}
+		
+		function timer() {
+			var wage = document.getElementById('wage').value;
+			var now = new Date();
+			// Change in seconds
+			var change = (now-start)/1000;
+			
+			var hours = leadingZero(parseInt( change / 3600 ) % 24);
+			var minutes = leadingZero(parseInt( change / 60 ) % 60);
+			var seconds = leadingZero((change % 60).toFixed(0));
+			var formatted_time = now.toLocaleTimeString();
+			document.getElementById('time').innerHTML = formatted_time;
+			document.getElementById('timer').innerHTML = hours+':'+minutes+':'+seconds;
+			document.getElementById('pay').innerHTML = '$'+((change)*wage/60/60).toFixed(2);
+		}
+	</script>
+	<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-1454657-6']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	</script>
+</body>
+</html>
